@@ -12,11 +12,12 @@
     "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
+    "element-ui": "^2.0.7",
+    "es6-promise": "^4.0.5",
     "vue": "^2.0.1",
-    "vuex": "^2.0.0",
     "vue-router": "^2.0.1",
-    "whatwg-fetch": "^1.0.0",
-    "es6-promise": "^4.0.5"
+    "vuex": "^2.0.0",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
