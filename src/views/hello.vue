@@ -10,14 +10,11 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      msg: "Hello Vue!",
+      msg: "Hello Vue!"
     };
   },
   methods: {
-    async getContent() {
-      const response = await fetch("/api/hello");
-      this.content = await response.text();
-    }
+    async getContent() {}
   },
   mounted() {
     // this.$store.commit("message", "欢迎使用 vue！");

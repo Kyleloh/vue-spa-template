@@ -14,14 +14,21 @@ const options = {
 
   // 多页面共享数据
   state: {
-    message: '',
+    _requestCount: 0
   },
 
   // 操作
   actions: {},
 
   // 数据变更
-  mutations: {},
+  mutations: {
+    _requestCountIncrement(state) {
+      state._requestCount++;
+    },
+    _requestCountDecrement(state) {
+      state._requestCount--;
+    }
+  },
 }
 
 // 为每个 state 字段生成对应的 mutations 方法

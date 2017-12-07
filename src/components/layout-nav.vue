@@ -7,7 +7,7 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-          <el-header class="projectHeader">{{projectTitle}}</el-header>
+          <el-header class="projectHeader">{{projectTitle}}<i v-if="$store.state._requestCount" class="el-icon-loading"></i></el-header>
           <template v-for="(item, index) in navList">
             <el-submenu v-if="item.type=='submenu'" :key="index" :index="index+''">
               <template slot="title">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { mapState } from "vuex";
 
 export default {
@@ -62,9 +63,7 @@ export default {
       ]
     };
   },
-  methods: {
-  },
-  mounted() {}
+  methods: {},
 };
 </script>
 
