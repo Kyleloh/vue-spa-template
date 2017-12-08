@@ -10,10 +10,14 @@ import storeOption from './vuex/store';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import exception from './helper/exception.js'
+import ncForm from 'ncform';
+import ncformThemeElementui from 'ncform-theme-elementui';
+
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
 Vue.use(ElementUI);
+Vue.use(ncForm, { extComponents: ncformThemeElementui });
 
 // 创建一个路由对象用于管理页面的路由
 const router = new VueRouter({

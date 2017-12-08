@@ -1,11 +1,12 @@
 <template>
   <div class="hello">
-    {{msg}}
+    <list></list>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import list from '../components/list.vue'
 
 export default {
   data() {
@@ -19,6 +20,9 @@ export default {
   mounted() {
     // this.$store.commit("message", "欢迎使用 vue！");
     this.getContent();
+  },
+  components: {
+    list
   }
 };
 </script>

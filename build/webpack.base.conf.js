@@ -22,7 +22,8 @@ module.exports = {
       'views': path.resolve(__dirname, '../src/views'),
       'routes': path.resolve(__dirname, '../src/routes'),
       'store': path.resolve(__dirname, '../src/store'),
-      'components': path.resolve(__dirname, '../src/components')
+      'components': path.resolve(__dirname, '../src/components'),
+      'vue': 'vue/dist/vue.js'
     }
   },
   resolveLoader: {
@@ -38,7 +39,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         include: projectRoot,
-        exclude: /node_modules/
+        exclude: /node_modules\/(?!lodash-es)/
       },
       {
         test: /\.json$/,

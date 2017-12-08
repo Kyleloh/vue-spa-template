@@ -17,7 +17,7 @@
       'message'
     ]),
     mounted: function () {
-      this.$store.commit('message', '404 Not Found！');
+      // this.$store.commit('message', '404 Not Found！');
     }
   }
 </script>
