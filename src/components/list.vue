@@ -6,117 +6,81 @@
         <ncform :form-schema="configData.query.normal" v-model="normalQueryValue" form-name="normalQuery"></ncform>
         <ncform v-show="showAdvSearch" :form-schema="configData.query.adv" v-model="advQueryValue" form-name="advQuery"></ncform>
       </el-col>
-<div class="searchBtnArea">
-      <el-button type="info" v-show="!showAdvSearch" class="searchBtn mgb10" icon="el-icon-plus" @click="showAdvSearch = !showAdvSearch" plain>展开</el-button>
-      <el-button type="info" v-show="showAdvSearch" class="searchBtn mgb10" icon="el-icon-minus" @click="showAdvSearch = !showAdvSearch" plain>收起</el-button>
-      <el-button type="primary" class="searchBtn" icon="el-icon-search" plain @click="search">搜索</el-button>
-</div>
+      <div class="searchBtnArea">
+        <el-button type="info" v-show="!showAdvSearch" class="searchBtn mgb10" icon="el-icon-plus" @click="showAdvSearch = !showAdvSearch" plain>展开</el-button>
+        <el-button type="info" v-show="showAdvSearch" class="searchBtn mgb10" icon="el-icon-minus" @click="showAdvSearch = !showAdvSearch" plain>收起</el-button>
+        <el-button type="primary" class="searchBtn" icon="el-icon-search" plain @click="search">搜索</el-button>
+      </div>
     </el-row>
 
     <el-row>
       <el-col :span="24">
         <el-row type="flex">
           <template v-if="configData.list.selectAll">
-            <el-button 
-              v-if="configData.toolbar.batchActions.delete.enable"
-              :disabled="this.$data.multipleSelection.length == 0"
-              type="danger"
-              icon="el-icon-delete"
-              @click="eventHandler(configData.toolbar.batchActions.delete.handler, null, multipleSelection)"
-              plain>
+            <el-button v-if="configData.toolbar.batchActions.delete.enable" :disabled="this.$data.multipleSelection.length == 0" type="danger" icon="el-icon-delete" @click="eventHandler(configData.toolbar.batchActions.delete.handler, null, multipleSelection)" plain>
               {{configData.toolbar.batchActions.delete.name}}
-              </el-button>
+            </el-button>
             <template v-for="(item, key) in configData.toolbar.batchActions.others">
-              <el-button
-                :disabled="this.$data.multipleSelection.length == 0"
-                :key="key"
-                v-if="item.enable"
-                type="info"
-                @click="eventHandler(item.handler, null, multipleSelection)"
-                plain>
+              <el-button :disabled="this.$data.multipleSelection.length == 0" :key="key" v-if="item.enable" type="info" @click="eventHandler(item.handler, null, multipleSelection)" plain>
                 {{item.name}}
               </el-button>
             </template>
           </template>
-            <el-col>
-            </el-col>
-            <el-button 
-              v-if="configData.toolbar.tools.new.enable"
-              type="success"
-              icon="el-icon-document"
-              @click="eventHandler(configData.toolbar.tools.new.handler)"
-              plain>
-              {{configData.toolbar.tools.new.name}}
-              </el-button>
-            <template v-for="(item, key) in configData.toolbar.tools.others">
-              <el-button
-                :key="key"
-                v-if="item.enable"
-                type="info"
-                @click="eventHandler(item.handler)"
-                plain>
-                {{item.name}}
-              </el-button>
-            </template>
+
+          <!-- 下面这个el-col用于flex布局，勿删 -->
+          <el-col>
+          </el-col>
+
+          <el-button v-if="configData.toolbar.tools.new.enable" type="success" icon="el-icon-document" @click="eventHandler(configData.toolbar.tools.new.handler)" plain>
+            {{configData.toolbar.tools.new.name}}
+          </el-button>
+          <template v-for="(item, key) in configData.toolbar.tools.others">
+            <el-button :key="key" v-if="item.enable" type="info" @click="eventHandler(item.handler)" plain>
+              {{item.name}}
+            </el-button>
+          </template>
         </el-row>
       </el-col>
     </el-row>
 
     <el-row>
-        <el-col :span="24">
-            <el-table
-                ref="multipleTable"
-                :data="tableData"
-                tooltip-effect="dark"
-                style="width: 100%"
-                @selection-change="handleSelectionChange">
-                <el-table-column
-                    v-if="configData.list.selectAll"
-                    type="selection">
-                </el-table-column>
+      <el-col :span="24">
+        <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 
-                
+          <el-table-column v-if="configData.list.selectAll" type="selection">
+          </el-table-column>
 
-                <el-table-column
-                  v-for="(item, key) in configData.list.columns"
-                  :key="key"
-                  :label="item.header">
-                    <template slot-scope="scope">{{ scope.row[item.dataField] }}</template>
-                </el-table-column>
+          <el-table-column v-for="(item, key) in configData.list.columns" :key="key" :label="item.header">
+            <template slot-scope="scope">{{ scope.row[item.dataField] }}</template>
+          </el-table-column>
 
-                <el-table-column
-                    align="center"
-                    label="操作">
-                    <template slot-scope="scope">
-                        <el-button v-if="configData.list.actions.view.enable" type="text" size="small" @click="eventHandler(configData.list.actions.view.handler, scope.row)">查看</el-button>
-                        <el-button v-if="configData.list.actions.edit.enable" type="text" size="small" @click="eventHandler(configData.list.actions.edit.handler, scope.row)">编辑</el-button>
-                        <el-button v-if="configData.list.actions.delete.enable" type="text" size="small" @click="eventHandler(configData.list.actions.delete.handler, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
+          <el-table-column align="center" label="操作">
+            <template slot-scope="scope">
+              <el-button v-if="configData.list.actions.view.enable" type="text" size="small" @click="eventHandler(configData.list.actions.view.handler, scope.row)">查看</el-button>
+              <el-button v-if="configData.list.actions.edit.enable" type="text" size="small" @click="eventHandler(configData.list.actions.edit.handler, scope.row)">编辑</el-button>
+              <el-button v-if="configData.list.actions.delete.enable" type="text" size="small" @click="eventHandler(configData.list.actions.delete.handler, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
     </el-row>
 
     <el-row>
-        <el-col align="right" style="margin-top:30px;">
-            <el-pagination
-                background
-                @current-change="currentChange"
-                layout="prev, pager, next"
-                :page-count="pageCount"
-                :current-page="pageNum">
-                </el-pagination>
-        </el-col>
+      <el-col align="right" style="margin-top:30px;">
+        <el-pagination background @current-change="currentChange" layout="prev, pager, next" :page-count="pageCount" :current-page="pageNum">
+        </el-pagination>
+      </el-col>
     </el-row>
 
     <el-dialog title="这是一个弹窗" :visible.sync="modalVisible">
 
     </el-dialog>
+
   </div>
 </template>
 
 <script>
-import _get from 'lodash-es/get';
+import _get from "lodash-es/get";
 
 export default {
   components: {},
@@ -134,8 +98,8 @@ export default {
               name: {
                 type: "string ",
                 ui: {
-                  label: '关键字',
-                  placeholder: '普通关键字'
+                  label: "关键字",
+                  placeholder: "普通关键字"
                 }
               }
             }
@@ -148,8 +112,8 @@ export default {
               supername: {
                 type: "string ",
                 ui: {
-                  label: '高级关键字',
-                  placeholder: '这就厉害了'
+                  label: "高级关键字",
+                  placeholder: "这就厉害了"
                 }
               }
             }
@@ -266,7 +230,8 @@ export default {
                 name: "",
                 config: {}
               }
-            },{
+            },
+            {
               header: "姓名", // 表头
               dataField: "name", // 数据源的字段
               component: {
@@ -274,7 +239,8 @@ export default {
                 name: "",
                 config: {}
               }
-            },{
+            },
+            {
               header: "地址", // 表头
               dataField: "address", // 数据源的字段
               component: {
@@ -282,7 +248,7 @@ export default {
                 name: "",
                 config: {}
               }
-            },
+            }
           ],
           actions: {
             // 项操作
@@ -325,8 +291,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         query: {
-          name: 'hey',
-          supername: 'superhey'
+          // name: "hey",
+          // supername: "superhey"
         }
       })
     }
@@ -335,6 +301,9 @@ export default {
     // 将props导入到data中，方便操作。
     this.$data.configData = JSON.parse(JSON.stringify(this.config));
     this.$data.valueData = JSON.parse(JSON.stringify(this.value));
+
+    this.$data.normalQueryValue = JSON.parse(JSON.stringify(this.value.query));
+    this.$data.advQueryValue = JSON.parse(JSON.stringify(this.value.query));
   },
   mounted() {
     // 加载数据
@@ -344,14 +313,14 @@ export default {
   data() {
     return {
       configData: {}, // config
-      valueData: {},  // value
+      valueData: {}, // value
       pageCount: 1, // 页码总数
-      tableData: [],  // 表单数据
+      tableData: [], // 表单数据
       multipleSelection: [], // 多选的选中项
-      showAdvSearch: false,  //  搜索模式，0为普通搜索, 1为高级搜索
+      showAdvSearch: false, //  搜索模式，0为普通搜索, 1为高级搜索
       modalVisible: false,
-      normalQueryValue: {name:'1'},
-      advQueryValue: {supername:'xx'},
+      normalQueryValue: {},
+      advQueryValue: {}
     };
   },
   methods: {
@@ -359,21 +328,24 @@ export default {
       const dataSource = this.$data.configData.list.datasource;
       const valueData = this.$data.valueData;
 
-      let postData = {
-      };
+      let postData = {};
       postData[dataSource.paramFields.pageSize] = valueData.pageSize;
       postData[dataSource.paramFields.pageNum] = valueData.pageNum;
-      if(dataSource.paramFields.query){
+      if (dataSource.paramFields.query) {
         postData[dataSource.paramFields.query] = valueData.query;
-      }else{
+      } else {
         postData = Object.assign(postData, valueData.query);
       }
       this.$axios.post(dataSource.apiUrl, postData).then(res => {
         const listField = dataSource.resField.list;
         const pageingTotalField = dataSource.resField.pageingTotal;
-        this.$data.tableData = listField ? _get(res.data, `${listField}`) : res.data;
-        this.$data.pageCount = pageingTotalField ? _get(res.data, `${pageingTotalField}`) : 1;
-      })
+        this.$data.tableData = listField
+          ? _get(res.data, `${listField}`)
+          : res.data;
+        this.$data.pageCount = pageingTotalField
+          ? _get(res.data, `${pageingTotalField}`)
+          : 1;
+      });
     },
     // 多选改变时触发
     handleSelectionChange(val) {
@@ -381,23 +353,18 @@ export default {
     },
     // Action Object config 实现
     // TODO: 具体的处理方法
-    eventHandler(handler, item={}, multipleSelection = []) {
-      switch(handler.type){
-        case 'ajax':
-          this.$axios.post(handler.options.apiUrl, {}).then(res => {
-            
-          })
+    eventHandler(handler, item = {}, multipleSelection = []) {
+      switch (handler.type) {
+        case "ajax":
+          // this.$axios.post(handler.options.apiUrl, {}).then(res => {});
           break;
-        case 'page':
-          this.$route.push({
-
-          });
+        case "page":
+          // this.$route.push({});
           break;
-        case 'modal':
-          this.$data.modalVisible = true;
+        case "modal":
+          // this.$data.modalVisible = true;
           break;
-        case 'component':
-        
+        case "component":
           break;
       }
     },
@@ -409,7 +376,21 @@ export default {
     // 搜索
     search() {
       const { configData, valueData } = this.$data;
-      
+      this.$data.valueData.query = Object.assign(
+        {},
+        this.$data.valueData.query,
+        this.$data.normalQueryValue,
+        this.$data.advQueryValue
+      );
+      this.loadtableData();
+    }
+  },
+  watch: {
+    valueData: {
+      handler: function(newVal) {
+        this.$emit("input", newVal);
+      },
+      deep: true
     }
   }
 };
@@ -419,15 +400,15 @@ export default {
 .mbSpace {
   margin-bottom: 20px;
 }
-.searchBtnArea{
-  width:90px;
+.searchBtnArea {
+  width: 90px;
   margin-left: 20px;
 }
 .searchBtn {
   height: 40px;
   margin: 0;
 }
-.mgb10{
+.mgb10 {
   margin-bottom: 10px;
 }
 </style>
