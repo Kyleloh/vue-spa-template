@@ -2,11 +2,13 @@
   <div class="list">
     <el-row type="flex" align="bottom" class='mbSpace'>
       <el-col>
-        <!-- 搜索配置 -->
+        <!-- 普通搜索配置 -->
         <ncform :form-schema="configData.query.normal" v-model="normalQueryValue" form-name="normalQuery"></ncform>
+        <!-- 高级搜索配置 -->
         <ncform v-show="showAdvSearch" :form-schema="configData.query.adv" v-model="advQueryValue" form-name="advQuery"></ncform>
       </el-col>
       <div class="searchBtnArea">
+        <!-- 搜索按钮区域 -->
         <el-button type="info" v-show="!showAdvSearch" class="searchBtn mgb10" icon="el-icon-plus" @click="showAdvSearch = !showAdvSearch" plain>展开</el-button>
         <el-button type="info" v-show="showAdvSearch" class="searchBtn mgb10" icon="el-icon-minus" @click="showAdvSearch = !showAdvSearch" plain>收起</el-button>
         <el-button type="primary" class="searchBtn" icon="el-icon-search" plain @click="search">搜索</el-button>
@@ -17,6 +19,7 @@
       <el-col :span="24">
         <el-row type="flex">
           <template v-if="configData.list.selectAll">
+            <!-- 批量操作 按钮 -->
             <el-button v-if="configData.toolbar.batchActions.delete.enable" :disabled="this.$data.multipleSelection.length == 0" type="danger" icon="el-icon-delete" @click="eventHandler(configData.toolbar.batchActions.delete.handler, null, multipleSelection)" plain>
               {{configData.toolbar.batchActions.delete.name}}
             </el-button>
@@ -31,6 +34,7 @@
           <el-col>
           </el-col>
 
+          <!-- 新建等 常规按钮 -->
           <el-button v-if="configData.toolbar.tools.new.enable" type="success" icon="el-icon-document" @click="eventHandler(configData.toolbar.tools.new.handler)" plain>
             {{configData.toolbar.tools.new.name}}
           </el-button>
@@ -46,14 +50,14 @@
     <el-row>
       <el-col :span="24">
         <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-
+          <!-- 全选 -->
           <el-table-column v-if="configData.list.selectAll" type="selection">
           </el-table-column>
-
+          <!-- 其他表头 -->
           <el-table-column v-for="(item, key) in configData.list.columns" :key="key" :label="item.header">
             <template slot-scope="scope">{{ scope.row[item.dataField] }}</template>
           </el-table-column>
-
+          <!-- 操作 -->
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
               <el-button v-if="configData.list.actions.view.enable" type="text" size="small" @click="eventHandler(configData.list.actions.view.handler, scope.row)">查看</el-button>
@@ -66,12 +70,14 @@
     </el-row>
 
     <el-row>
+      <!-- 页码 -->
       <el-col align="right" style="margin-top:30px;">
         <el-pagination background @current-change="currentChange" layout="prev, pager, next" :page-count="pageCount" :current-page="pageNum">
         </el-pagination>
       </el-col>
     </el-row>
 
+    <!-- 弹窗 -->
     <el-dialog title="这是一个弹窗" :visible.sync="modalVisible">
 
     </el-dialog>
@@ -302,6 +308,7 @@ export default {
     this.$data.configData = JSON.parse(JSON.stringify(this.config));
     this.$data.valueData = JSON.parse(JSON.stringify(this.value));
 
+    // 初始化搜索内容
     this.$data.normalQueryValue = JSON.parse(JSON.stringify(this.value.query));
     this.$data.advQueryValue = JSON.parse(JSON.stringify(this.value.query));
   },
@@ -318,12 +325,13 @@ export default {
       tableData: [], // 表单数据
       multipleSelection: [], // 多选的选中项
       showAdvSearch: false, //  搜索模式，0为普通搜索, 1为高级搜索
-      modalVisible: false,
-      normalQueryValue: {},
-      advQueryValue: {}
+      modalVisible: false,  // 弹窗是否显示
+      normalQueryValue: {}, // 常规搜索value
+      advQueryValue: {} // 高级搜索value
     };
   },
   methods: {
+    // 加载表格数据
     loadtableData() {
       const dataSource = this.$data.configData.list.datasource;
       const valueData = this.$data.valueData;
@@ -386,6 +394,7 @@ export default {
     }
   },
   watch: {
+    // valueData变化时触发事件通知上层。方便保存状态。
     valueData: {
       handler: function(newVal) {
         this.$emit("input", newVal);
