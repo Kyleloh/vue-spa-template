@@ -108,12 +108,14 @@
                 </el-pagination>
         </el-col>
     </el-row>
+
+    <el-dialog title="这是一个弹窗" :visible.sync="modalVisible">
+
+    </el-dialog>
   </div>
 </template>
 
 <script>
-// import Vue from "vue";
-// import { mapState } from "vuex";
 import _get from 'lodash-es/get';
 
 export default {
@@ -330,12 +332,9 @@ export default {
     }
   },
   created() {
+    // 将props导入到data中，方便操作。
     this.$data.configData = JSON.parse(JSON.stringify(this.config));
     this.$data.valueData = JSON.parse(JSON.stringify(this.value));
-
-    // this.$data.normalQueryValue = JSON.parse(JSON.stringify(this.value.query));
-    // this.$data.advQueryValue = JSON.parse(JSON.stringify(this.value.query));
-
   },
   mounted() {
     // 加载数据
@@ -350,6 +349,7 @@ export default {
       tableData: [],  // 表单数据
       multipleSelection: [], // 多选的选中项
       showAdvSearch: false,  //  搜索模式，0为普通搜索, 1为高级搜索
+      modalVisible: false,
       normalQueryValue: {name:'1'},
       advQueryValue: {supername:'xx'},
     };
@@ -368,39 +368,45 @@ export default {
       }else{
         postData = Object.assign(postData, valueData.query);
       }
-
       this.$axios.post(dataSource.apiUrl, postData).then(res => {
         const listField = dataSource.resField.list;
         const pageingTotalField = dataSource.resField.pageingTotal;
         this.$data.tableData = listField ? _get(res.data, `${listField}`) : res.data;
         this.$data.pageCount = pageingTotalField ? _get(res.data, `${pageingTotalField}`) : 1;
-        console.log(res.data);
       })
     },
     // 多选改变时触发
     handleSelectionChange(val) {
       this.$data.multipleSelection = val;
     },
+    // Action Object config 实现
+    // TODO: 具体的处理方法
     eventHandler(handler, item={}, multipleSelection = []) {
       switch(handler.type){
         case 'ajax':
-          
+          this.$axios.post(handler.options.apiUrl, {}).then(res => {
+            
+          })
           break;
         case 'page':
+          this.$route.push({
 
+          });
           break;
         case 'modal':
-
+          this.$data.modalVisible = true;
           break;
         case 'component':
         
           break;
       }
     },
+    // 页码变化
     currentChange(currentIndex) {
       this.$data.valueData.pageNum = currentIndex;
       this.loadtableData();
     },
+    // 搜索
     search() {
       const { configData, valueData } = this.$data;
       
